@@ -87,7 +87,7 @@ def get_sub_categories(url):
     sub_cats = re.compile('<div class="column footer-%s">(.+?)</div>' % (utype),re.DOTALL).findall(data)
     sub_cats = re.compile('href="(.+?)">(.+?)<',re.DOTALL).findall(sub_cats[0])
     for url,name in sub_cats:
-      add_dir(name.encode('utf-8'), urlbase+url, icon, 'get_playlist')
+      add_dir(name.replace('&amp;','&').encode('utf-8'), urlbase+url, icon, 'get_playlist')
 
 
 
@@ -179,7 +179,7 @@ def get_playlist(url):
     for i in items:
         item_url = None
         state = i['media-status']['@attributes']['state']
-        title = i['title'].encode('utf-8')
+        title = i['title'].replace('&amp;','&').encode('utf-8')
         if state != 'active':
             addon_log('item state: %s: %s' %(title, state))
             continue
@@ -228,7 +228,7 @@ def get_playlist(url):
             'Date': date_time.strftime('%d.%m.%Y'),
             'Premiered': date_time.strftime('%d-%m-%Y'),
             'Duration': get_duration(i['itunes-duration']),
-            'Plot': i['description'].encode('utf-8')
+            'Plot': i['description'].replace('&amp;','&').encode('utf-8')
             }
         add_dir(title, item_url, thumb, 'resolve_url', info)
 
